@@ -88,18 +88,46 @@ var upperCasedCharacters = [
   'Z'
 ];
 
+let bigArray = [lowerCasedCharacters, upperCasedCharacters, numericCharacters, specialCharacters];
+
 // Function to prompt user for password options
 function getPasswordOptions() {
 
+  const passwordOptions = {
+    passwordLength: "",
+    lowercaseChoice: false,
+    uppercaseChoice: false,
+    numericCharactersChoice: false,
+    specialCharactersChoice: false
+  };
+
+  let passwordLengthInput = prompt("Please specify password length between 10 to 64 characters");
+  passwordOptions.passwordLength = parseInt(passwordLengthInput)
+  if (passwordOptions.passwordLength < 10 || passwordOptions.passwordLength > 64) {
+    alert("Error, invalid selection made. Please try again with a number between 10 and 64");
+  }
+  else {
+    passwordOptions.lowercaseChoice = confirm("Would you like the password to include lowercase characters? Click OK for yes or Cancel for no");
+    passwordOptions.uppercaseChoice = confirm("Would you like the password to include uppercase characters? Click OK for yes or Cancel for no");
+    passwordOptions.numericCharactersChoice = confirm("Would you like the password to include numeric characters? Click OK for yes or Cancel for no");
+    passwordOptions.specialCharactersChoice = confirm("Would you like the password to include special characters E.g. $@%&*? Click OK for yes or Cancel for no");
+
+  }
+  console.log(passwordOptions);
 }
+
 
 // Function for getting a random element from an array
 function getRandom(arr) {
-
+  return arr[Math.floor(Math.random() * arr.length)];
 }
 
 // Function to generate password with user input
 function generatePassword() {
+  getPasswordOptions();
+  
+
+
 
 }
 
@@ -116,3 +144,4 @@ function writePassword() {
 
 // Add event listener to generate button
 generateBtn.addEventListener('click', writePassword);
+
