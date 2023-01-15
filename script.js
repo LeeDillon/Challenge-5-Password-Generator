@@ -88,11 +88,10 @@ var upperCasedCharacters = [
   'Z'
 ];
 
-let bigArray = [lowerCasedCharacters, upperCasedCharacters, numericCharacters, specialCharacters];
-
 // Function to prompt user for password options
 function getPasswordOptions() {
 
+  // Creating an object with default values to store user input
   const passwordOptions = {
     passwordLength: "",
     lowercaseChoice: false,
@@ -100,7 +99,7 @@ function getPasswordOptions() {
     numericCharactersChoice: false,
     specialCharactersChoice: false
   };
-
+  // Ask user for password parameters and store them in object
   let passwordLengthInput = prompt("Please specify password length between 10 to 64 characters");
   passwordOptions.passwordLength = parseInt(passwordLengthInput)
   if (passwordOptions.passwordLength < 10 || passwordOptions.passwordLength > 64) {
@@ -111,24 +110,46 @@ function getPasswordOptions() {
     passwordOptions.uppercaseChoice = confirm("Would you like the password to include uppercase characters? Click OK for yes or Cancel for no");
     passwordOptions.numericCharactersChoice = confirm("Would you like the password to include numeric characters? Click OK for yes or Cancel for no");
     passwordOptions.specialCharactersChoice = confirm("Would you like the password to include special characters E.g. $@%&*? Click OK for yes or Cancel for no");
-
   }
-  console.log(passwordOptions);
+  return passwordOptions;
 }
 
 
 // Function for getting a random element from an array
 function getRandom(arr) {
-  return arr[Math.floor(Math.random() * arr.length)];
+  return arr[Math.floor(Math.random() * arr.length)][Math.floor(Math.random() * arr.length)];
 }
 
 // Function to generate password with user input
 function generatePassword() {
-  getPasswordOptions();
-  
-
-
-
+  let userPasswordOptions = getPasswordOptions();
+  // Check that user has selected at least one character type
+  if (userPasswordOptions.lowercaseChoice === false && userPasswordOptions.uppercaseChoice === false && userPasswordOptions.numericCharactersChoice === false && userPasswordOptions.specialCharactersChoice === false) {
+    alert("ERROR, at least one character type must be selected. Please try again!")
+  } else {
+    // Create a new array containing existing character arrays based on users choices
+    let userPasswordOptionsArray = [];
+    if (userPasswordOptions.lowercaseChoice === true) {
+      userPasswordOptionsArray.push(lowerCasedCharacters);
+    }
+    if (userPasswordOptions.uppercaseChoice === true) {
+      userPasswordOptionsArray.push(upperCasedCharacters);
+    }
+    if (userPasswordOptions.numericCharactersChoice === true) {
+      userPasswordOptionsArray.push(numericCharacters);
+    }
+    if (userPasswordOptions.specialCharactersChoice === true) {
+      userPasswordOptionsArray.push(specialCharacters);
+    }
+    // Create a new array to store the randomised values taken from selected character arrays
+    let passwordOutputArray = [];
+    for (i = 0; i < userPasswordOptions.passwordLength; i++) {
+      passwordOutputArray[i] = getRandom(userPasswordOptionsArray);
+    }
+    // Convert outputted random array into a string and remove commas. Then store this in a new variable that is returned by the method
+    let passwordOutput = passwordOutputArray.join("");
+    return passwordOutput;
+  }
 }
 
 // Get references to the #generate element
